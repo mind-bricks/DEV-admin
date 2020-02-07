@@ -1,0 +1,8 @@
+{
+  "appId": "io.ionic.starter",
+  "appName": "CMS-admin",
+  "bundledWebRuntime": false,
+  "npmClient": "npm",
+  "webDir": "www",
+  "cordova": {}
+}
