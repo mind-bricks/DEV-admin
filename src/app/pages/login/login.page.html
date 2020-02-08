@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      <ion-text color="primary">
+        CMS Admin
+      </ion-text>
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row class="ion-align-items-center">
+      <ion-col size="12" size-md>
+        <!-- ion-col [start] -->
+      </ion-col>
+      <ion-col size="12" size-md>
+        <ion-list lines="full">
+          <ion-label class="ion-text-center">
+            <ion-text color="primary">
+              <h1>Login</h1>
+            </ion-text>
+          </ion-label>
+          <ion-item>
+            <ion-label position="floating">
+              <ion-text color="medium">
+                username
+              </ion-text>
+              <!-- <ion-text color="danger">*</ion-text> -->
+            </ion-label>
+            <ion-input type="text" [(ngModel)]="username">
+            </ion-input>
+          </ion-item>
+          <ion-item>
+            <ion-label position="floating">
+              <ion-text color="medium">
+                password
+              </ion-text>
+              <!-- <ion-text color="danger">*</ion-text> -->
+            </ion-label>
+            <ion-input type="password" [(ngModel)]="password">
+            </ion-input>
+          </ion-item>
+          <section class="ion-margin-top">
+            <ion-button expand="block" (click)="onConfirm()">Confirm</ion-button>
+          </section>
+        </ion-list>
+      </ion-col>
+      <ion-col size="12" size-md>
+        <!-- ion-col [end] -->
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
+</ion-content>
