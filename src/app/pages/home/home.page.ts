@@ -3,7 +3,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { Router } from '@angular/router';
-import { LoginService } from '../../services/login.service';
+import { UMSService } from '../../services/ums.service';
 
 @Component({
   selector: 'app-home',
@@ -14,7 +14,7 @@ export class HomePage implements OnInit {
 
   constructor(
     protected router: Router,
-    protected loginService: LoginService,
+    protected umsService: UMSService,
   ) {
 
   }
@@ -23,9 +23,17 @@ export class HomePage implements OnInit {
   }
 
   async ionViewWillEnter() {
-    if (!await this.loginService.isLoggedIn()) {
+    if (!await this.umsService.isLoggedIn()) {
       this.router.navigate(['/login']);
     }
+  }
+
+  goCMSPage() {
+    this.router.navigate(['/cms']);
+  }
+
+  goCMSGrantPage() {
+    this.router.navigate(['/cms/grant']);
   }
 
 }

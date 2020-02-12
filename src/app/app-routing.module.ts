@@ -19,6 +19,12 @@ const routes: Routes = [
       import('./pages/home/home.module')
         .then(m => m.HomePageModule)
   },
+  {
+    path: 'cms',
+    loadChildren: () =>
+      import('./pages/cms/cms.module')
+        .then(m => m.CmsPageModule)
+  },
 ];
 
 @NgModule({

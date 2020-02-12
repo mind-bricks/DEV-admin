@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>
       <ion-text color="primary">
-        CMS Admin
+        Admin Site
       </ion-text>
     </ion-title>
   </ion-toolbar>
@@ -28,7 +28,7 @@
               </ion-text>
               <!-- <ion-text color="danger">*</ion-text> -->
             </ion-label>
-            <ion-input type="text" [(ngModel)]="username">
+            <ion-input required type="text" [(ngModel)]="username">
             </ion-input>
           </ion-item>
           <ion-item>
@@ -38,7 +38,7 @@
               </ion-text>
               <!-- <ion-text color="danger">*</ion-text> -->
             </ion-label>
-            <ion-input type="password" [(ngModel)]="password">
+            <ion-input required type="password" [(ngModel)]="password">
             </ion-input>
           </ion-item>
           <section class="ion-margin-top">

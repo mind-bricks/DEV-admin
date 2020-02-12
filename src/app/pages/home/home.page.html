@@ -1,14 +1,26 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>
-      Ionic Blank
+      <ion-text color="primary">
+        Admin Site
+      </ion-text>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
+  <ion-list>
+    <ion-item (click)="goCMSPage()">
+      <ion-icon name="briefcase"></ion-icon>
+      <ion-label class="ion-margin">
+        CMS
+      </ion-label>
+    </ion-item>
+    <ion-item (click)="goCMSGrantPage()">
+      <ion-icon name="key"></ion-icon>
+      <ion-label class="ion-margin">
+        CMS Grant
+      </ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

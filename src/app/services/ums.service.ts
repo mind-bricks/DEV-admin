@@ -7,7 +7,7 @@ import { StorageService } from './storage.service';
 @Injectable({
   providedIn: 'root'
 })
-export class LoginService {
+export class UMSService {
 
   constructor(
     protected configService: ConfigureService,
@@ -46,7 +46,7 @@ export class LoginService {
       }
 
     } catch (e) {
-      console.log(e);
+      console.error(e);
       throw e.error;
     }
   }

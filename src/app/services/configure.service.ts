@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { isString } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -7,14 +8,18 @@ export class ConfigureService {
 
   configure = {
     domain: {
-      user: 'https://user.macrocura.com',
-      cms: 'https://cms.macrocura.cn',
+      user: 'http://ums.erythrocyte.cn',
+      cms: 'http://cms.erythrocyte.cn',
     },
     url: {
       user: {
-        login: '/user/managers/login/',
-        self: '/user/managers/self/',
+        login: '/users/login/',
+        self: '/users/self/',
       },
+      cms: {
+        layouts: '/layouts/',
+        layoutElements: '/layouts/{{layoutId}}/elements/'
+      }
     },
   };
 
@@ -28,12 +33,23 @@ export class ConfigureService {
     }
   }
 
-  public get(key: string): string | null {
-    let config = this.configure;
+  public get(key: string, params?: object): string | null {
+    let config: object = this.configure;
     key.split(':').forEach(k => {
       config = config instanceof Object ? config[k] : null;
     });
-    return config instanceof Object ? null : config;
+    if (!isString(config)) {
+      throw Error('invalid configuartion key');
+    }
+
+    let ret = String(config);
+    if (params) {
+      for (const value of Object.entries(params)) {
+        ret = ret.replace(`{{${value[0]}}}`, value[1]);
+      }
+    }
+
+    return ret.toString();
   }
 
 }

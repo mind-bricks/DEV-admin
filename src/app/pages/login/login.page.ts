@@ -4,7 +4,7 @@ import {
   ToastController,
   LoadingController,
 } from '@ionic/angular';
-import { LoginService } from '../../services/login.service';
+import { UMSService } from '../../services/ums.service';
 import { StorageService } from '../../services/storage.service';
 
 @Component({
@@ -21,8 +21,8 @@ export class LoginPage implements OnInit {
     protected location: Location,
     protected loadingController: LoadingController,
     protected toastController: ToastController,
-    protected loginService: LoginService,
     protected storageService: StorageService,
+    protected umsService: UMSService,
   ) {
     this.username = this.storageService.get('username') || '';
     this.password = '';
@@ -49,26 +49,25 @@ export class LoginPage implements OnInit {
       return;
     }
     const loading = await this.loadingController.create({
-      spinner: null,
-      // duration: 5000,
+      // spinner: null,
       message: 'Logging, Please wait...',
       translucent: true,
     });
     await loading.present();
     try {
-      await this.loginService.login(
+      await this.umsService.login(
         this.username,
         this.password,
       );
-
       this.location.back();
+
     } catch (e) {
       const toast = await this.toastController.create({
         message: e.error,
-        duration: 2000
+        duration: 2000,
       });
       toast.present();
-      return;
+
     } finally {
       loading.dismiss();
     }
