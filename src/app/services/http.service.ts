@@ -23,7 +23,7 @@ export class HttpService {
     }
 
     const paramsText = Array.from(Object.entries(params))
-      .map(i => encodeURIComponent(`${i[0]}=${i[1]}`))
+      .map(i => `${encodeURIComponent(i[0])}=${encodeURIComponent(i[1])}`)
       .join('&');
     return url + (
       url.indexOf('?') < 0 ? '?' : '&') + paramsText;

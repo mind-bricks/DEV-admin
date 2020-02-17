@@ -1,0 +1,14 @@
+<ion-list class="ion-no-padding ion-no-margin">
+  <ion-item button detail="false" *ngIf="currentLayout" (click)="backToParent()">
+    back to parent
+  </ion-item>
+  <ion-item button detail="false" *ngIf="currentLayout" (click)="backToRoot()">
+    back to root
+  </ion-item>
+  <ion-item button detail="false" (click)="newFolder()">
+    new folder
+  </ion-item>
+  <ion-item button detail="false" lines="none" (click)="newFile()">
+    new file
+  </ion-item>
+</ion-list>

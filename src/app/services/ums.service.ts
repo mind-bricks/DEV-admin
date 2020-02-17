@@ -2,7 +2,22 @@ import { Injectable } from '@angular/core';
 import { ConfigureService } from './configure.service';
 import { HttpService } from './http.service';
 import { StorageService } from './storage.service';
+import { IPageResult } from './util';
 
+export interface IUMSUser {
+  readonly uuid: string;
+  readonly username: string;
+  readonly email?: string;
+  readonly mobile?: string;
+}
+
+export interface IUMSPermission {
+  readonly name: string;
+}
+
+export interface IUMSGroup {
+  readonly name: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -57,15 +72,44 @@ export class UMSService {
     }
 
     try {
-      const res = await this.httpService.get(
-        this.configService.get('url:user:self'),
-      );
-      return !!res;
+      await this.getUser();
+      return true;
 
     } catch (e) {
-      console.log(e);
+      console.error(e);
     }
 
-    return false;
+    return null;
+  }
+
+  public async getUser(): Promise<IUMSUser> {
+    const res = await this.httpService.get(
+      this.configService.get('url:user:self'),
+    );
+    return res as IUMSUser;
+  }
+
+  public async getPermissions(
+    offset: number = 0,
+    limit: number = 100,
+    params?: object,
+  ) {
+    const res = await this.httpService.get(
+      this.configService.get('url:user:selfPermissionList'),
+      Object.assign({ offset, limit }, params),
+    );
+    return res as IPageResult<IUMSPermission>;
+  }
+
+  public async getGroups(
+    offset: number = 0,
+    limit: number = 100,
+    params?: object,
+  ) {
+    const res = await this.httpService.get(
+      this.configService.get('url:user:selfGroupList'),
+      Object.assign({ offset, limit }, params),
+    );
+    return res as IPageResult<IUMSGroup>;
   }
 }

@@ -12,7 +12,7 @@ const routes: Routes = [
   {
     path: 'grant',
     component: CmsGrantPage,
-  }
+  },
 ];
 
 @NgModule({

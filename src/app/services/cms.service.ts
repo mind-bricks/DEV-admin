@@ -32,41 +32,56 @@ export class CMSService {
   ) {
   }
 
-  public async getRootLayouts(
+  public async getLayouts(
+    layoutId: string | null,
     offset: number = 0,
-    limit?: number,
+    limit: number = 100,
   ) {
     const res = await this.httpService.get(
-      this.configService.get('url:cms:layouts'),
-      { parent__isnull: true, offset, limit, },
+      this.configService.get('url:cms:layoutList'),
+      Object.assign(
+        { offset, limit },
+        layoutId
+          ? { parent: layoutId }
+          : { parent__isnull: true }),
     );
-    return res ? res as IPageResult<ICMSLayout> : null;
-  }
-
-  public async getSubLayouts(
-    layoutId: string,
-    offset: number = 0,
-    limit?: number,
-  ) {
-    const res = await this.httpService.get(
-      this.configService.get('url:cms:layouts'),
-      { parent: layoutId, offset, limit, },
-    );
-    return res ? res as IPageResult<ICMSLayout> : null;
+    return res as IPageResult<ICMSLayout>;
   }
 
   public async getLayoutElements(
     layoutId: string,
     offset: number = 0,
-    limit?: number,
+    limit: number = 100,
   ) {
     const res = await this.httpService.get(
       this.configService.get(
-        'url:cms:layoutElements',
+        'url:cms:elementList',
         { layoutId, },
       ),
       { offset, limit, }
     );
-    return res ? res as IPageResult<ICMSLayoutElement> : null;
+    return res as IPageResult<ICMSLayoutElement>;
+  }
+
+  public async createLayout(
+    layoutId: string | null,
+    name: string,
+  ) {
+    const res = await this.httpService.post(
+      this.configService.get('url:cms:layoutList'),
+      Object.assign(
+        { name },
+        layoutId ? { parent: layoutId } : {}),
+    );
+    return res as ICMSLayout;
+  }
+
+  public async deleteLayout(
+    layoutId: string
+  ) {
+    await this.httpService.delete(
+      this.configService.get(
+        'url:cms:layout', { layoutId }),
+    );
   }
 }

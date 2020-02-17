@@ -15,10 +15,13 @@ export class ConfigureService {
       user: {
         login: '/users/login/',
         self: '/users/self/',
+        selfPermissionList: '/users/self/permissions/',
+        selfGroupList: '/users/self/groups/',
       },
       cms: {
-        layouts: '/layouts/',
-        layoutElements: '/layouts/{{layoutId}}/elements/'
+        layoutList: '/layouts/',
+        layout: '/layouts/{{layoutId}}/',
+        elementList: '/layouts/{{layoutId}}/elements/',
       }
     },
   };
