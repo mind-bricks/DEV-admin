@@ -54,6 +54,10 @@ export class HomePage implements OnInit {
     await alert.present();
   }
 
+  goAPIs() {
+    this.router.navigate(['/api']);
+  }
+
   goCMS() {
     this.router.navigate(['/cms']);
   }

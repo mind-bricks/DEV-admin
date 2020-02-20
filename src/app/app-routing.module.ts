@@ -25,6 +25,12 @@ const routes: Routes = [
       import('./pages/cms/cms.module')
         .then(m => m.CmsPageModule)
   },
+  {
+    path: 'api',
+    loadChildren: () =>
+      import('./pages/api/api.module')
+        .then(m => m.ApiPageModule)
+  },
 ];
 
 @NgModule({

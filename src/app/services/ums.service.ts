@@ -41,7 +41,7 @@ export class UMSService {
     try {
       // start login request
       const res = await this.httpService.post(
-        this.configService.get('url:user:login'),
+        this.configService.get('url:ums:login'),
         {
           username,
           password,
@@ -84,7 +84,7 @@ export class UMSService {
 
   public async getUser(): Promise<IUMSUser> {
     const res = await this.httpService.get(
-      this.configService.get('url:user:self'),
+      this.configService.get('url:ums:self'),
     );
     return res as IUMSUser;
   }
@@ -95,7 +95,7 @@ export class UMSService {
     params?: object,
   ) {
     const res = await this.httpService.get(
-      this.configService.get('url:user:selfPermissionList'),
+      this.configService.get('url:ums:selfPermissionList'),
       Object.assign({ offset, limit }, params),
     );
     return res as IPageResult<IUMSPermission>;
@@ -107,7 +107,7 @@ export class UMSService {
     params?: object,
   ) {
     const res = await this.httpService.get(
-      this.configService.get('url:user:selfGroupList'),
+      this.configService.get('url:ums:selfGroupList'),
       Object.assign({ offset, limit }, params),
     );
     return res as IPageResult<IUMSGroup>;
