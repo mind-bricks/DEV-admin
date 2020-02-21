@@ -22,18 +22,24 @@ export class SwaggerService {
       if (!document.getElementById(swaggerScriptId)) {
         const script = document.createElement('script');
         script.id = swaggerScriptId;
-        script.src = 'https://unpkg.com/swagger-ui-dist@3/swagger-ui-bundle.js';
+        script.src = '/assets/swagger/swagger-ui-bundle.js';
         script.onload = (e: Event) => {
           this.bundle = SwaggerUIBundle;
           resolve(SwaggerUIBundle);
         };
         script.onabort = (e: Event) => {
-          reject(null);
+          resolve(null);
         };
         script.onerror = (e: Event) => {
-          reject(null);
+          resolve(null);
         };
+
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = '/assets/swagger/theme-muted.css';
+
         document.body.appendChild(script);
+        document.head.appendChild(link);
       }
     });
   }
