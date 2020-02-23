@@ -34,7 +34,7 @@ export class CmsPopoverComponent implements OnInit {
       component: CmsCreateComponent,
       componentProps: {
         currentLayout: this.currentLayout,
-        createElement: false,
+        isCreateElement: false,
         refresh: this.refresh,
       }
     });
@@ -47,7 +47,7 @@ export class CmsPopoverComponent implements OnInit {
       component: CmsCreateComponent,
       componentProps: {
         currentLayout: this.currentLayout,
-        createElement: true,
+        isCreateElement: true,
         refresh: this.refresh,
       }
     });

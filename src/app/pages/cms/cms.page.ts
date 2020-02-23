@@ -8,7 +8,7 @@ import {
 import { CmsPopoverComponent } from './cms-popover.component';
 import {
   ICMSLayout,
-  ICMSLayoutElement,
+  ICMSElement,
   CMSService,
 } from '../../services/cms.service';
 
@@ -22,7 +22,7 @@ export class CmsPage implements OnInit {
 
   layoutPath: Array<ICMSLayout> = [];
   layouts: Array<ICMSLayout> = [];
-  layoutElements: Array<ICMSLayoutElement> = [];
+  layoutElements: Array<ICMSElement> = [];
 
   constructor(
     protected alertController: AlertController,
@@ -120,7 +120,7 @@ export class CmsPage implements OnInit {
       const parent = await this.getCurrentLayout();
       if (parent) {
         const res1 = await this.cmsService.getLayouts(parent.uuid);
-        const res2 = await this.cmsService.getLayoutElements(parent.uuid);
+        const res2 = await this.cmsService.getElements(parent.uuid);
         this.layouts = res1.results;
         this.layoutElements = res2.results;
       } else {

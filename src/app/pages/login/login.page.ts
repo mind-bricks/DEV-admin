@@ -14,8 +14,8 @@ import { StorageService } from '../../services/storage.service';
 })
 export class LoginPage implements OnInit {
 
-  protected username: string;
-  protected password: string;
+  username: string;
+  password: string;
 
   constructor(
     protected location: Location,

@@ -7,7 +7,7 @@
     </ion-buttons>
     <ion-title>
       <ion-text color="primary">
-        Create {{createElement ? "File" : "Folder"}}
+        Create {{isCreateElement ? "File" : "Folder"}}
       </ion-text>
     </ion-title>
   </ion-toolbar>
@@ -27,6 +27,15 @@
               </ion-text>
             </ion-label>
             <ion-input required type="text" [(ngModel)]="name">
+            </ion-input>
+          </ion-item>
+          <ion-item button *ngIf="isCreateElement" (click)="fileSelect()">
+            <ion-label>
+              <ion-text color="medium">
+                Select File
+              </ion-text>
+            </ion-label>
+            <ion-input #file required hidden type="file" (change)="fileChange($event)">
             </ion-input>
           </ion-item>
           <section class="ion-margin-top">

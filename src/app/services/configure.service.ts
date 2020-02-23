@@ -19,9 +19,12 @@ export class ConfigureService {
         selfGroupList: '/users/self/groups/',
       },
       cms: {
+        contentList: '/contents/',
+        content: '/contents/{{contentId}}/',
         layoutList: '/layouts/',
         layout: '/layouts/{{layoutId}}/',
         elementList: '/layouts/{{layoutId}}/elements/',
+        element: '/layouts/{{layoutId}}/elements/{{elementName}}',
       }
     },
   };

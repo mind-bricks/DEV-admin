@@ -7,6 +7,7 @@ export interface ICMSLayout {
   readonly uuid: string;
   name: string;
   parent: string | null;
+  is_public: boolean;
   read_grant: string | null;
   write_grant: string | null;
   readonly created_user: string;
@@ -14,12 +15,23 @@ export interface ICMSLayout {
   readonly modified_time: string;
 }
 
-export interface ICMSLayoutElement {
+export interface ICMSElement {
   name: string;
   content: string;
   readonly created_time: string;
   readonly modified_time: string;
 }
+
+export interface ICMSContent {
+  readonly uuid: string;
+  label: string;
+  text: string;
+  file: string;
+  is_public: boolean;
+  read_grant: string | null;
+  write_grant: string | null;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +60,7 @@ export class CMSService {
     return res as IPageResult<ICMSLayout>;
   }
 
-  public async getLayoutElements(
+  public async getElements(
     layoutId: string,
     offset: number = 0,
     limit: number = 100,
@@ -60,20 +72,47 @@ export class CMSService {
       ),
       { offset, limit, }
     );
-    return res as IPageResult<ICMSLayoutElement>;
+    return res as IPageResult<ICMSElement>;
   }
 
   public async createLayout(
     layoutId: string | null,
-    name: string,
+    layoutName: string,
   ) {
     const res = await this.httpService.post(
       this.configService.get('url:cms:layoutList'),
       Object.assign(
-        { name },
+        { name: layoutName },
         layoutId ? { parent: layoutId } : {}),
     );
     return res as ICMSLayout;
+  }
+
+  public async createElement(
+    layoutId: string,
+    elementName: string,
+    contentId: string,
+  ) {
+    const res = await this.httpService.post(
+      this.configService.get(
+        'url:cms:elementList', { layoutId, }),
+      { name: elementName, content: contentId },
+    );
+    return res as ICMSElement;
+  }
+
+  public async createContent(
+    file?: File,
+    text?: string,
+  ) {
+    const data: FormData = new FormData();
+    data.append('file', file || null);
+    data.append('text', text || null);
+    const res = await this.httpService.post(
+      this.configService.get('url:cms:contentList'),
+      data,
+    );
+    return res as ICMSContent;
   }
 
   public async deleteLayout(
@@ -82,6 +121,25 @@ export class CMSService {
     await this.httpService.delete(
       this.configService.get(
         'url:cms:layout', { layoutId }),
+    );
+  }
+
+  public async deleteElement(
+    layoutId: string,
+    elementName: string
+  ) {
+    await this.httpService.delete(
+      this.configService.get(
+        'url:cms:element', { layoutId, elementName }),
+    );
+  }
+
+  public async deleteContent(
+    contentId: string,
+  ) {
+    await this.httpService.delete(
+      this.configService.get(
+        'url:cms:content', { contentId }),
     );
   }
 }

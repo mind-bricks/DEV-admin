@@ -1,5 +1,11 @@
-import { Component, OnInit } from '@angular/core';
 import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+} from '@angular/core';
+import {
+  IonInput,
   ModalController,
   ToastController,
 } from '@ionic/angular';
@@ -14,11 +20,16 @@ import { isFunction } from 'util';
   templateUrl: './cms-create.component.html',
   styleUrls: ['./cms-create.component.scss'],
 })
-export class CmsCreateComponent implements OnInit {
+export class CmsCreateComponent implements OnInit, AfterViewInit {
   currentLayout: ICMSLayout | undefined;
-  createElement = false;
+  isCreateElement = false;
   refresh: () => Promise<void> | undefined;
   name = '';
+
+  @ViewChild('file', { static: false })
+  fileInput: IonInput | undefined;
+  fileInputElement: HTMLElement | undefined;
+  file: File | undefined;
 
   constructor(
     protected modalController: ModalController,
@@ -30,14 +41,15 @@ export class CmsCreateComponent implements OnInit {
   ngOnInit() {
   }
 
-  async create() {
-    if (!this.currentLayout) {
-      console.error('no current layout');
-      return;
-    }
+  async ngAfterViewInit() {
+    this.fileInputElement = this.fileInput
+      ? await this.fileInput.getInputElement()
+      : undefined;
+  }
 
-    const succeed = this.createElement
-      ? await this.createLayoutElement()
+  async create() {
+    const succeed = this.isCreateElement
+      ? await this.createElement()
       : await this.createLayout();
     if (succeed) {
       await this.modalController.dismiss();
@@ -59,7 +71,7 @@ export class CmsCreateComponent implements OnInit {
 
     try {
       await this.cmsService.createLayout(
-        this.currentLayout.uuid,
+        this.currentLayout ? this.currentLayout.uuid : null,
         this.name,
       );
     } catch (e) {
@@ -69,8 +81,61 @@ export class CmsCreateComponent implements OnInit {
     return true;
   }
 
-  async createLayoutElement() {
+  async createElement() {
+    if (!this.currentLayout) {
+      const toast = await this.toastController.create({
+        message: 'Can not create Element without Layout!',
+        duration: 2000
+      });
+      await toast.present();
+      return true;
+    }
+
+    if (!this.name.length) {
+      const toast = await this.toastController.create({
+        message: 'Please Enter Name',
+        duration: 2000
+      });
+      await toast.present();
+      return false;
+    }
+
+    if (!this.file) {
+      const toast = await this.toastController.create({
+        message: 'Please Select File',
+        duration: 2000
+      });
+      await toast.present();
+      return false;
+    }
+
+    try {
+      const res = await this.cmsService.createContent(this.file);
+      await this.cmsService.createElement(
+        this.currentLayout.uuid, this.name, res.uuid);
+    } catch (e) {
+      console.error(e);
+      const toast = await this.toastController.create({
+        message: e.error[String('error_description')],
+        duration: 2000
+      });
+      await toast.present();
+    }
+
     return true;
+  }
+
+  async fileSelect() {
+    if (this.fileInputElement) {
+      this.fileInputElement.click();
+    }
+  }
+
+  async fileChange(event: Event) {
+    const files = event.target[String('files')];
+    if (files instanceof FileList) {
+      this.file = files[0];
+    }
   }
 
   async close() {
