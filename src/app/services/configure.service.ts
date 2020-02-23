@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { isString } from 'util';
+import { isString, isObject } from 'util';
 
 @Injectable({
   providedIn: 'root'
@@ -53,6 +53,18 @@ export class ConfigureService {
     }
 
     return ret.toString();
+  }
+
+  public getKeys(key: string): Array<string> {
+    let config: object = this.configure;
+    key.split(':').forEach(k => {
+      config = config instanceof Object ? config[k] : null;
+    });
+    if (!isObject(config)) {
+      throw Error('invalid configuartion key');
+    }
+
+    return Object.keys(config);
   }
 
 }

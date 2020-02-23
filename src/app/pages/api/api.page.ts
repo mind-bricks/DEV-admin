@@ -1,9 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { ToastController } from '@ionic/angular';
+import {
+  PopoverController,
+  ToastController
+} from '@ionic/angular';
 import { ConfigureService } from '../../services/configure.service';
 import { StorageService } from '../../services/storage.service';
 import { HttpService } from '../../services/http.service';
 import { SwaggerService } from '../../services/swagger.service';
+import { ApiPopoverComponent } from './api-popover.component';
 
 
 @Component({
@@ -14,6 +18,7 @@ import { SwaggerService } from '../../services/swagger.service';
 export class ApiPage implements OnInit {
 
   constructor(
+    protected popoverController: PopoverController,
     protected toastController: ToastController,
     protected configureService: ConfigureService,
     protected storageService: StorageService,
@@ -30,7 +35,7 @@ export class ApiPage implements OnInit {
     await this.loadAPI('ums');
   }
 
-  async loadAPI(domain) {
+  async loadAPI(domain: string) {
     const bundle = await this.swaggerService.getUIBundle();
     if (!bundle) {
       const toast = await this.toastController.create({
@@ -50,7 +55,6 @@ export class ApiPage implements OnInit {
         dom_id: '#swagger-ui',
         spec: res,
         requestInterceptor: (request) => {
-          console.log(request);
           request[String('headers')][String('Authorization')] =
             `Bearer ${this.storageService.get('access_token')}`;
         }
@@ -65,6 +69,18 @@ export class ApiPage implements OnInit {
       await toast.present();
       return;
     }
+  }
+
+  async goAPIPopover(ev: Event) {
+    const popover = await this.popoverController.create({
+      component: ApiPopoverComponent,
+      componentProps: {
+        loadAPI: this.loadAPI.bind(this),
+      },
+      event: ev,
+      translucent: true,
+    });
+    await popover.present();
   }
 
 }

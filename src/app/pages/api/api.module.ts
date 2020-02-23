@@ -6,6 +6,7 @@ import { IonicModule } from '@ionic/angular';
 
 import { ApiPageRoutingModule } from './api-routing.module';
 
+import { ApiPopoverComponent } from './api-popover.component';
 import { ApiPage } from './api.page';
 
 @NgModule({
@@ -15,6 +16,12 @@ import { ApiPage } from './api.page';
     IonicModule,
     ApiPageRoutingModule
   ],
-  declarations: [ApiPage]
+  declarations: [
+    ApiPopoverComponent,
+    ApiPage,
+  ],
+  bootstrap: [
+    ApiPopoverComponent,
+  ]
 })
-export class ApiPageModule {}
+export class ApiPageModule { }

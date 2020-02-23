@@ -1,0 +1,8 @@
+<ion-list class="ion-no-padding ion-no-margin">
+  <ion-item button detail="false" *ngFor="let domain of getDomains()" (click)="changeDomain(domain)">
+    APIs of {{domain}}
+  </ion-item>
+  <!-- <ion-item button detail="false" lines="none" (click)="newFile()">
+    new file
+  </ion-item> -->
+</ion-list>

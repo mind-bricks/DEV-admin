@@ -4,6 +4,11 @@
       <ion-back-button>
       </ion-back-button>
     </ion-buttons>
+    <ion-buttons slot="end">
+      <ion-button (click)="goAPIPopover($event)">
+        <ion-icon name="server-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
     <ion-title>
       <ion-text color="primary">
         APIs Document
