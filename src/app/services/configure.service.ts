@@ -24,8 +24,8 @@ export class ConfigureService {
         layoutList: '/layouts/',
         layout: '/layouts/{{layoutId}}/',
         elementList: '/layouts/{{layoutId}}/elements/',
-        element: '/layouts/{{layoutId}}/elements/{{elementName}}',
-      }
+        element: '/layouts/{{layoutId}}/elements/{{elementName}}/',
+      },
     },
   };
 

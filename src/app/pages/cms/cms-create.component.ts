@@ -29,7 +29,7 @@ export class CmsCreateComponent implements OnInit, AfterViewInit {
   @ViewChild('file', { static: false })
   fileInput: IonInput | undefined;
   fileInputElement: HTMLElement | undefined;
-  file: File | undefined;
+  fileBlob: File | undefined;
 
   constructor(
     protected modalController: ModalController,
@@ -100,7 +100,7 @@ export class CmsCreateComponent implements OnInit, AfterViewInit {
       return false;
     }
 
-    if (!this.file) {
+    if (!this.fileBlob) {
       const toast = await this.toastController.create({
         message: 'Please Select File',
         duration: 2000
@@ -110,7 +110,7 @@ export class CmsCreateComponent implements OnInit, AfterViewInit {
     }
 
     try {
-      const res = await this.cmsService.createContent(this.file);
+      const res = await this.cmsService.createContent(this.fileBlob);
       await this.cmsService.createElement(
         this.currentLayout.uuid, this.name, res.uuid);
     } catch (e) {
@@ -134,7 +134,7 @@ export class CmsCreateComponent implements OnInit, AfterViewInit {
   async fileChange(event: Event) {
     const files = event.target[String('files')];
     if (files instanceof FileList) {
-      this.file = files[0];
+      this.fileBlob = files[0];
     }
   }
 

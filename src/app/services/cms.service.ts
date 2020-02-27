@@ -75,6 +75,15 @@ export class CMSService {
     return res as IPageResult<ICMSElement>;
   }
 
+  public async getContent(
+    contentId: string
+  ) {
+    const res = await this.httpService.get(
+      this.configService.get('url:cms:content', { contentId }),
+    );
+    return res as ICMSContent;
+  }
+
   public async createLayout(
     layoutId: string | null,
     layoutName: string,

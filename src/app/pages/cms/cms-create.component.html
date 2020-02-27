@@ -32,7 +32,7 @@
           <ion-item button *ngIf="isCreateElement" (click)="fileSelect()">
             <ion-label>
               <ion-text color="medium">
-                Select File
+                {{fileBlob ? fileBlob.name : "Select File"}}
               </ion-text>
             </ion-label>
             <ion-input #file required hidden type="file" (change)="fileChange($event)">

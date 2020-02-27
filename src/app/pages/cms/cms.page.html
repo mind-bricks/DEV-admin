@@ -11,38 +11,73 @@
     </ion-buttons>
     <ion-title>
       <ion-text color="primary">
-        {{getCurrentPathName()}}
+        CMS
       </ion-text>
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <!-- <ion-list-header>
-    <ion-button *ngFor="let layout of layoutPath" fill="outline">
-      {{layout.name}}
-    </ion-button>
-  </ion-list-header> -->
-  <ion-list>
-    <ion-item-sliding *ngFor="let layout of layouts">
-      <ion-item button (click)="selectLayout(layout)">
-        <ion-icon name="folder"></ion-icon>
-        <ion-label class="ion-margin-start">
-          {{layout.name}}
-        </ion-label>
-      </ion-item>
-      <ion-item-options side="end">
-        <ion-item-option color="danger" (click)="deleteLayout(layout)">
-          Delete
-        </ion-item-option>
-      </ion-item-options>
-    </ion-item-sliding>
+  <ion-refresher slot="fixed" (ionRefresh)="refresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <ion-grid class="ion-no-padding ion-no-margin">
+    <ion-row>
+      <ion-col size="12" size-md class="ion-no-padding ion-no-margin">
+        <ion-list>
+          <ion-item-group>
+            <ion-item-divider color="light">
+              <ion-label>
+                Path
+              </ion-label>
+            </ion-item-divider>
 
-    <ion-item button *ngFor="let element of layoutElements">
-      <ion-icon name="document"></ion-icon>
-      <ion-label class="ion-margin-start">
-        {{element.name}}
-      </ion-label>
-    </ion-item>
-  </ion-list>
+            <ion-item lines="full">
+              <ion-button size="small" (click)="refreshToRoot()">
+                root
+              </ion-button>
+              <ion-button size="small" *ngFor="let layout of layoutPath" (click)="selectLayout(layout)">
+                <ion-icon name="play"></ion-icon>
+                {{layout.name}}
+              </ion-button>
+            </ion-item>
+
+            <ion-item-divider color="light">
+              <ion-label>
+                Contents
+              </ion-label>
+            </ion-item-divider>
+
+            <ion-item-sliding *ngFor="let layout of layouts">
+              <ion-item button lines="full" (click)="selectLayout(layout)">
+                <ion-icon name="folder"></ion-icon>
+                <ion-label class="ion-margin-start">
+                  {{layout.name}}
+                </ion-label>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="deleteLayout(layout)">
+                  Delete
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+
+            <ion-item-sliding *ngFor="let element of layoutElements">
+              <ion-item button lines="full" detail="false" (click)="selectElement(element)">
+                <ion-icon name="document"></ion-icon>
+                <ion-label class="ion-margin-start">
+                  {{element.name}}
+                </ion-label>
+              </ion-item>
+              <ion-item-options side="end">
+                <ion-item-option color="danger" (click)="deleteElement(element)">
+                  Delete
+                </ion-item-option>
+              </ion-item-options>
+            </ion-item-sliding>
+          </ion-item-group>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-// import { Router } from '@angular/router';
+import { Router } from '@angular/router';
 import {
   AlertController,
   PopoverController,
@@ -11,6 +11,7 @@ import {
   ICMSElement,
   CMSService,
 } from '../../services/cms.service';
+import { isFunction } from 'util';
 
 
 @Component({
@@ -25,6 +26,7 @@ export class CmsPage implements OnInit {
   layoutElements: Array<ICMSElement> = [];
 
   constructor(
+    protected router: Router,
     protected alertController: AlertController,
     protected popoverController: PopoverController,
     protected toastController: ToastController,
@@ -38,14 +40,6 @@ export class CmsPage implements OnInit {
 
   async ionViewWillEnter() {
     await this.refresh();
-  }
-
-  getCurrentPathName(): string {
-    let pathName = '/';
-    for (const layout of this.layoutPath) {
-      pathName += `${layout.name}/`;
-    }
-    return pathName;
   }
 
   async goCMSPopover(ev: Event) {
@@ -71,8 +65,40 @@ export class CmsPage implements OnInit {
   }
 
   async selectLayout(layout: ICMSLayout) {
-    this.layoutPath.push(layout);
+    const currentLayout = await this.getCurrentLayout();
+    if (currentLayout) {
+      if (layout.parent === currentLayout.uuid) {
+        this.layoutPath.push(layout);
+      } else {
+        const i = this.layoutPath.indexOf(layout);
+        if (i !== -1) {
+          this.layoutPath.splice(i + 1);
+        }
+      }
+    } else {
+      if (!layout.parent) {
+        this.layoutPath.push(layout);
+      }
+    }
     await this.refresh();
+  }
+
+  async selectElement(element: ICMSElement) {
+    try {
+      const content =
+        await this.cmsService.getContent(element.content);
+      if (content.file) {
+        window.open(content.file);
+        // await this.router.navigateByUrl(content.file);
+      }
+    } catch (e) {
+      console.log(e);
+      const toast = await this.toastController.create({
+        message: e.error[String('error_description')],
+        duration: 2000,
+      });
+      await toast.present();
+    }
   }
 
   async deleteLayout(layout: ICMSLayout) {
@@ -105,6 +131,63 @@ export class CmsPage implements OnInit {
     await alert.present();
   }
 
+  async deleteElement(element: ICMSElement) {
+    const layout = await this.getCurrentLayout();
+    if (!layout) {
+      console.error('element should be in a layout');
+      return;
+    }
+
+    const alert = await this.alertController.create({
+      header: 'Confirm',
+      message: '<strong>Delete Anyway ?</strong>',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          handler: (blah) => { }
+        },
+        {
+          text: 'Delete',
+          handler: async () => {
+            try {
+              await this.cmsService.deleteElement(
+                layout.uuid, element.name);
+              await this.refresh();
+              await this.cmsService.deleteContent(
+                element.content);
+
+            } catch (e) {
+              const toast = await this.toastController.create({
+                message: e.error[String('error_description')],
+                duration: 2000,
+              });
+              await toast.present();
+            }
+          }
+        },
+        {
+          text: 'Delete Reference Only',
+          handler: async () => {
+            try {
+              await this.cmsService.deleteElement(
+                layout.uuid, element.name);
+              await this.refresh();
+
+            } catch (e) {
+              const toast = await this.toastController.create({
+                message: e.error[String('error_description')],
+                duration: 2000,
+              });
+              await toast.present();
+            }
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
   async refreshToRoot() {
     this.layoutPath.splice(0);
     await this.refresh();
@@ -115,7 +198,7 @@ export class CmsPage implements OnInit {
     await this.refresh();
   }
 
-  async refresh() {
+  async refresh(event?: Event) {
     try {
       const parent = await this.getCurrentLayout();
       if (parent) {
@@ -132,6 +215,13 @@ export class CmsPage implements OnInit {
       console.error(e);
       this.layouts = [];
       this.layoutElements = [];
+    }
+
+    if (event) {
+      const completeFunc = event.target[String('complete')];
+      if (isFunction(completeFunc)) {
+        completeFunc.bind(event.target)();
+      }
     }
   }
 
