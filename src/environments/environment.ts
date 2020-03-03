@@ -3,7 +3,21 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  // configure: {
+  //   domain: {
+  //     ums: 'https://devuser.macrocura.com/user',
+  //     // cms: 'http://cms.erythrocyte.cn',
+  //   },
+  //   url: {
+  //     ums: {
+  //       login: '/managers/login/',
+  //       self: '/managers/self/',
+  //       // selfPermissionList: '/users/self/permissions/',
+  //       // selfGroupList: '/users/self/groups/',
+  //     },
+  //   }
+  // }
 };
 
 /*

@@ -30,13 +30,40 @@ export class ConfigureService {
   };
 
   constructor() {
-    for (const i of Object.keys(this.configure.url)) {
-      const domain = this.configure.domain[i];
-      const urls = this.configure.url[i];
-      for (const j of Object.keys(urls)) {
-        urls[j] = domain + urls[j];
+    this.setup(this.configure);
+  }
+
+  protected setup(configure: object) {
+    const urlPaths = configure[String('url')];
+    const urlDomains = configure[String('domain')];
+    if (
+      !isObject(urlPaths) ||
+      !isObject(urlDomains) ||
+      urlPaths[String('has_setup')]
+    ) {
+      return;
+    }
+
+    for (const i of Object.keys(urlPaths)) {
+      const domain = urlDomains[i];
+      const paths = urlPaths[i];
+      for (const j of Object.keys(paths)) {
+        paths[j] = domain + paths[j];
       }
     }
+
+    // set has_setup
+    urlPaths[String('has_setup')] = true;
+  }
+
+  public update(configure: object) {
+    // update configure from environment
+    for (const e of Object.entries(configure)) {
+      this.configure[e[0]] = e[1];
+    }
+    this.setup(this.configure);
+
+    console.log(this.configure);
   }
 
   public get(key: string, params?: object): string | null {
