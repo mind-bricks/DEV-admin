@@ -8,8 +8,8 @@ export class ConfigureService {
 
   configure = {
     domain: {
-      ums: 'http://ums.erythrocyte.cn',
-      cms: 'http://cms.erythrocyte.cn',
+      ums: 'https://ums.erythrocyte.cn',
+      cms: 'https://cms.erythrocyte.cn',
     },
     url: {
       ums: {
