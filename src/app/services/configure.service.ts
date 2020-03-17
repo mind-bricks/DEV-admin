@@ -10,6 +10,7 @@ export class ConfigureService {
     domain: {
       ums: 'https://ums.erythrocyte.cn',
       cms: 'https://cms.erythrocyte.cn',
+      crm: 'https://crm.erythrocyte.cn',
     },
     url: {
       ums: {
